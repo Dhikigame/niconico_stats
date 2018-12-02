@@ -1,0 +1,10 @@
+Dockerfile
+__pycache__
+.ssh
+.bash_history
+.cache
+.git
+*.pyc
+*.yml
+video_eval.db
+nohup.out
