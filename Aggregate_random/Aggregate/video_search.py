@@ -8,13 +8,6 @@ from datetime import datetime, date, timedelta
 import pytz
 from xml.etree import ElementTree
 
-### 評価すべき動画の基準 ###
-# 投稿されてから2年以内か
-DATE = 365 * 2
-# 再生数が15000以内か
-VIEW = 15000
-# 再生数とマイリスト割合が1.5%以上か
-VIEW_MYLIST_PER = 1.5
 
 """
 現在新しく投稿されている動画IDを取得する(smXXXXXXXX,soXXXXXXXX,nmXXXXXXXX)
