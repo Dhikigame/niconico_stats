@@ -8,3 +8,4 @@ __pycache__
 *.yml
 video_eval.db
 nohup.out
+videodata.db
