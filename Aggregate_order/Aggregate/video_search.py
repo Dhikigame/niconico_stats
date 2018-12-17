@@ -34,35 +34,38 @@ def new_video_search():
 最新動画IDから動画IDを順序通りに取得する(smXXXXXXXX,soXXXXXXXX,nmXXXXXXXX)
 @param {str} videoID 動画ID
 """
-def video_search(videoID):
-    # 動画IDの形式(sm,so,nm)を切り取る
-    videoID = videoID[2:]
-    # 更新した日時が一番新しい動画IDを取得する
-    new_regist_videoid = new_videoid_select()
-    # new_regist_videoidに動画IDの情報があればそのIDから取得開始、なければ動画ID1から取得開始
-    if new_regist_videoid == '':
-        for i in range(1, int(videoID)):
-            format_rand_videoID = format_video_search(i)
+def video_search(videoID, new_regist_videoid=0):
+    while True:
+        # 動画IDの形式(sm,so,nm)を切り取る
+        videoID = videoID[2:]
+        if new_regist_videoid == 0:
+            # 更新した日時が一番新しい動画IDを取得する
+            new_regist_videoid = new_videoid_select()
+        # new_regist_videoidに動画IDの情報があればそのIDから取得開始、なければ動画ID1から取得開始
+        if new_regist_videoid == '':
+            for i in range(1, int(videoID)):
+                format_rand_videoID = format_video_search(i)
 
-            if format_rand_videoID == "novideo":
-                continue
-            else:
-                print ("------------------------------")
-                print(format_rand_videoID + str(i))
-                # 動画ID取得したらDBに登録
-                db_regist(format_rand_videoID + str(i))
-    else:    
-        for i in range(int(new_regist_videoid), int(videoID)):
-            format_rand_videoID = format_video_search(i)
+                if format_rand_videoID == "novideo":
+                    continue
+                else:
+                    print ("------------------------------")
+                    print(format_rand_videoID + str(i))
+                    # 動画ID取得したらDBに登録
+                    db_regist(format_rand_videoID + str(i))
+            new_regist_videoid = 1
+        else:    
+            for i in range(int(new_regist_videoid), int(videoID)):
+                format_rand_videoID = format_video_search(i)
 
-            if format_rand_videoID == "novideo":
-                continue
-            else:
-                print ("------------------------------")
-                print(format_rand_videoID + str(i))
-                # 動画ID取得したらDBに登録
-                db_regist(format_rand_videoID + str(i))
-
+                if format_rand_videoID == "novideo":
+                    continue
+                else:
+                    print ("------------------------------")
+                    print(format_rand_videoID + str(i))
+                    # 動画ID取得したらDBに登録
+                    db_regist(format_rand_videoID + str(i))
+            new_regist_videoid = 1
 
 """
 動画IDから形式を取得する(sm,so,nm)

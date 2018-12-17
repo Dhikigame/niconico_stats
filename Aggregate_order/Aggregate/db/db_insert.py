@@ -17,6 +17,10 @@ def db_regist(videoID):
     video_date = video_info_get.date_video()
     # タイトルを取得
     video_title = video_info_get.title_video()
+    # タイトル任意文字エスケープ
+    video_title = video_title.replace("'", "")
+    video_title = video_title.replace('"', '')
+
     # 再生数取得
     video_view = video_info_get.view_video()
     # コメント数取得
@@ -40,8 +44,10 @@ def db_regist(videoID):
             sql = 'insert into video_data(video_id, title, view, comment, mylist, regist_date, upload_date'
             for i in range(0, len(video_tags)):
                 sql += ', tag' + str(i+1) + ''
-            sql += ") values ('" + str(videoID) + "','" + str(video_title) + "'," + str(video_view) + "," + str(video_comment) + "," + str(video_mylist) + ",'" + str(datetime.today()) + "','" + str(video_date) + "'" 
+            sql += ') values ("' + str(videoID) + '","' + str(video_title) + '",' + str(video_view) + ',' + str(video_comment) + ',' + str(video_mylist) + ',"' + str(datetime.today()) + '","' + str(video_date) + '"' 
             for i in range(0, len(video_tags)):
+                video_tags[i] = video_tags[i].replace("'", "")
+                video_tags[i] = video_tags[i].replace('"', '')
                 sql += ', "' + str(video_tags[i]) + '"'
             sql += ')' 
             print(sql)
@@ -50,9 +56,11 @@ def db_regist(videoID):
             print("insert:{0}".format(videoID))
         # DBに同じ動画IDがあれば最新の情報に更新する
         else:
-            sql = "update video_data set title='" + str(video_title) + "', view=" + str(video_view) + ", comment=" + str(video_comment) + ", mylist=" + str(video_mylist) + ", regist_date='" + str(datetime.today()) + "', upload_date='" + str(video_date) + "'" #, tag1=?, tag2=?, tag3=?, tag4=?, tag5=?, tag6=?, tag7=?, tag8=?, tag9=?, tag10=?, tag11=? where video_id = ' + videoID + "'"
+            sql = 'update video_data set title="' + str(video_title) + '", view=' + str(video_view) + ", comment=" + str(video_comment) + ", mylist=" + str(video_mylist) + ", regist_date='" + str(datetime.today()) + "', upload_date='" + str(video_date) + "'" #, tag1=?, tag2=?, tag3=?, tag4=?, tag5=?, tag6=?, tag7=?, tag8=?, tag9=?, tag10=?, tag11=? where video_id = ' + videoID + "'"
             for i in range(0, len(video_tags)):
-                sql += ", tag" + str(i+1) + "= '" + str(video_tags[i]) + "'"
+                video_tags[i] = video_tags[i].replace("'", "")
+                video_tags[i] = video_tags[i].replace('"', '')
+                sql += ", tag" + str(i+1) + '= "' + str(video_tags[i]) + '"'
             sql += " where video_id = '" + videoID + "'"
             print(sql)
             cursor.execute(sql)
