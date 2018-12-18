@@ -9,3 +9,5 @@ __pycache__
 video_eval.db
 nohup.out
 videodata.db
+out.log
+db_alter.py
