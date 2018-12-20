@@ -27,9 +27,13 @@ class XML_VideoData(Json_VideoData):
         self.videoID = videoID
     def video_parse(self):
         # XML形式からreadし、タグ先頭の情報(動画ID,タイトル)を返す
-        req = urllib.request.Request(self.url + self.videoID)
-        with urllib.request.urlopen(req) as response:
-            XmlData = response.read()
-        root = ET.fromstring(XmlData)
-
-        return root
+        try:
+            req = urllib.request.Request(self.url + self.videoID)
+            with urllib.request.urlopen(req) as response:
+                XmlData = response.read()
+                root = ET.fromstring(XmlData)
+            return root
+        except RemoteDisconnected:
+            print("ERROR：" + self.videoID)
+            root = [["novideo"]]
+            return root
