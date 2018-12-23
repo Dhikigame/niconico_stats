@@ -3,6 +3,7 @@ import urllib.request
 import urllib.parse
 import json
 import xml.etree.ElementTree as ET
+from http.client import RemoteDisconnected
 
 """
 ニコニコ動画のWeb APIから動画情報をパースできる形式に変換
