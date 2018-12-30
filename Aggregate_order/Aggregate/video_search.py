@@ -77,7 +77,7 @@ def format_video_search(videoID):
     # XML形式からreadできる形式に変換
     xml_video = video_parse.XML_VideoData("http://ext.nicovideo.jp/api/getthumbinfo/sm", str(videoID))
     root = xml_video.video_parse()
-    
+
     if "novideo" in str(root[0][0]):
         return "novideo"
 
