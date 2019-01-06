@@ -18,9 +18,9 @@ def db_regist(videoID):
     # タイトルを取得
     video_title = video_info_get.title_video()
     # タイトル任意文字エスケープ
-    video_title = video_title.replace("'", "")
-    video_title = video_title.replace('"', '')
-
+    if video_title != None:
+        video_title = video_title.replace("'", "")
+        video_title = video_title.replace('"', '')
     # 再生数取得
     video_view = video_info_get.view_video()
     # 動画IDがso拡張子以外の動画のコメント取得
