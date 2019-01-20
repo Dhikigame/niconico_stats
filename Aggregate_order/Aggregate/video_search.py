@@ -141,6 +141,8 @@ class Video_Eval:
             return video_tags
         else:
             for i in range(0, len(self.xml[0][17])):
+                if i > 11:
+                    return video_tags
                 tmp_tag = self.xml[0][17][i].text
                 video_tags.append(str(tmp_tag))
             return video_tags
