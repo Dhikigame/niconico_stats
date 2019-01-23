@@ -42,7 +42,7 @@ def video_search(videoID, new_regist_videoid=0):
             # 更新した日時が一番新しい動画IDを取得する
             new_regist_videoid = new_videoid_select()
         # new_regist_videoidに動画IDの情報があればそのIDから取得開始、なければ動画ID1から取得開始
-        if new_regist_videoid == '':
+        if new_regist_videoid == None:
             for i in range(1, int(videoID)):
                 format_rand_videoID = format_video_search(i)
 
@@ -73,35 +73,32 @@ def video_search(videoID, new_regist_videoid=0):
 @returns {str} 取得した形式(取得できなかったら消去・非公開にされているため、"novideo"を返す)
 """
 def format_video_search(videoID):
-    # 形式がsmか判定
     # XML形式からreadできる形式に変換
-    xml_video = video_parse.XML_VideoData("http://ext.nicovideo.jp/api/getthumbinfo/sm", str(videoID))
-    root = xml_video.video_parse()
+    sm_xml_video = video_parse.XML_VideoData("http://ext.nicovideo.jp/api/getthumbinfo/sm", str(videoID))
+    so_xml_video = video_parse.XML_VideoData("http://ext.nicovideo.jp/api/getthumbinfo/so", str(videoID))
+    nm_xml_video = video_parse.XML_VideoData("http://ext.nicovideo.jp/api/getthumbinfo/nm", str(videoID))
 
-    if "novideo" in str(root[0][0]):
-        return "novideo"
+    sm_root = sm_xml_video.video_parse()
+    so_root = so_xml_video.video_parse()
+    nm_root = nm_xml_video.video_parse()
 
-    if "sm" in str(root[0][0].text):
+    # 形式がsmか判定
+    if "sm" in str(sm_root[0][0].text):
         return "sm"
-    # 形式がsoか判定
     else:
-        # XML形式からreadできる形式に変換
-        xml_video = video_parse.XML_VideoData("http://ext.nicovideo.jp/api/getthumbinfo/so", str(videoID))
-        root = xml_video.video_parse()
-
-        if "so" in str(root[0][0].text):
-            return "so"
-        # 形式がnmか判定
-        else:
-            # XML形式からreadできる形式に変換
-            xml_video = video_parse.XML_VideoData("http://ext.nicovideo.jp/api/getthumbinfo/nm", str(videoID))
-            root = xml_video.video_parse()
-
-            if "nm" in str(root[0][0].text):
-                return "nm"
-
-            else:
-                return "novideo"
+        video_no_found = "novideo"
+    # 形式がsoか判定
+    if "so" in str(so_root[0][0].text):
+        return "so"
+    else:
+        video_no_found = "novideo"
+    # 形式がnmか判定
+    if "nm" in str(nm_root[0][0].text):
+        return "nm"
+    else:
+        video_no_found = "novideo"
+    
+    return video_no_found
 
 
 class Video_Eval:
