@@ -43,7 +43,7 @@ def video_search(videoID, new_regist_videoid=0):
             new_regist_videoid = new_videoid_select()
         # new_regist_videoidに動画IDの情報があればそのIDから取得開始、なければ動画ID1から取得開始
         if new_regist_videoid == None:
-            for i in range(1, int(videoID)):
+            for i in range(1, int(videoID)):                
                 format_rand_videoID = format_video_search(i)
 
                 if format_rand_videoID == "novideo":
@@ -106,36 +106,38 @@ class Video_Eval:
         # XML形式からreadできる形式に変換
         xml_video = video_parse.XML_VideoData("http://ext.nicovideo.jp/api/getthumbinfo/", str(videoID))
         xml = xml_video.video_parse()
-        #tree = ElementTree.parse(xml)
-        #root = xml.getroot()
-        #self.root = root
         self.xml = xml
-
+    # XML形式から取得した投稿日付を日付型に変換 (xml[0][4].text: %Y-%m-%dT%H:%M:%S+09:00 -> %Y-%m-%d %H:%M:%S)
     def date_video(self):
-        # XML形式から取得した投稿日付を日付型に変換 (xml[0][4].text: %Y-%m-%dT%H:%M:%S+09:00 -> %Y-%m-%d %H:%M:%S)
         date = self.xml[0][4].text
         date = date[:-6]
         date = date.replace('T', ' ') 
         date = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
         return date
+    # XML形式からタイトル取得する
+    def title_video(self):
+        return self.xml[0][1].text
+    # XML形式から再生数取得する
     def view_video(self):
-        # XML形式から再生数取得する
         view = int(self.xml[0][9].text)
         return view
+    # XML形式からコメント数取得する
     def comment_video(self):
-        # XML形式から再生数取得する
         comment = int(self.xml[0][10].text)
         return comment
+    # XML形式からマイリスト数取得する
     def mylist_video(self):
-        # XML形式から再生数取得する
         mylist = int(self.xml[0][11].text)
         return mylist
+    # XML形式からタグをリストに格納する
     def tag_video(self):
         video_tags = list()
+        # 登録タグが見つからない場合
         if self.xml[0][17] is None:
             tmp_tag = "No category"
             video_tags.append(str(tmp_tag))
             return video_tags
+        # 11個まで登録タグをリストに格納する
         else:
             for i in range(0, len(self.xml[0][17])):
                 if i > 11:
@@ -143,5 +145,3 @@ class Video_Eval:
                 tmp_tag = self.xml[0][17][i].text
                 video_tags.append(str(tmp_tag))
             return video_tags
-    def title_video(self):
-        return self.xml[0][1].text
